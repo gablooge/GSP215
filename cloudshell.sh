@@ -52,9 +52,14 @@ gcloud compute forwarding-rules create http-ipv6-rule --global --target-http-pro
 gcloud compute forwarding-rules list
 
 
-gcloud beta compute instances create siege-vm --zone=us-west1-c --machine-type=n1-standard-1 --metadata startup-script='#! /bin/bash
-sudo su -
-sudo apt-get -y install siege'
+# gcloud beta compute instances create siege-vm --zone=us-west1-c --machine-type=n1-standard-1 --metadata startup-script='#! /bin/bash
+# sudo su -
+# sudo apt-get -y install siege'
+
+gcloud beta compute instances create siege-vm --zone=us-west1-c --machine-type=n1-standard-1
+
+gcloud beta compute ssh --zone "us-west1-c" "siege-vm" --quiet --command="sudo apt-get -y install siege"
+
 
 export EXTERNAL_IP=$(gcloud compute instances list --filter="NAME=siege-vm" | awk 'BEGIN { cnt=0; } { cnt+=1; if (cnt > 1) print $5; }')
 
